@@ -5,6 +5,7 @@ export interface Product {
   volume: string;
   image: string;
   price: number;
+  originalPrice?: number;
   shortDescription: string;
   ingredients: string[];
   benefits: string[];

@@ -24,8 +24,8 @@ const AppHeader = ({ compact = false }: AppHeaderProps) => {
             className="app-header__logo"
             src={logo}
             alt="Opodis Pharma"
-            width={110}
-            height={42}
+            width={120}
+            height={48}
           />
         </button>
 

@@ -20,6 +20,7 @@ export const PRODUCTS: Product[] = [
     volume: "Chai 100ml và 250ml",
     image: phytobebe,
     price: 120000,
+    originalPrice: 150000,
     shortDescription:
       "Dung dịch tắm gội thảo dược làm sạch da và tóc bé hằng ngày, hỗ trợ chăm sóc làn da nhạy cảm.",
     ingredients: [

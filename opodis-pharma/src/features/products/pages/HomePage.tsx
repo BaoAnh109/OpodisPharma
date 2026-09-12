@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Page, useNavigate } from "zmp-ui";
 
-import betelImg from "@/assets/images/herbal/betel.svg";
-import cajuputImg from "@/assets/images/herbal/cajuput.svg";
-import labGmpImg from "@/assets/images/herbal/lab-gmp.svg";
+import duoc1Img from "@/assets/images/herbal/Duoc1.jpg";
+import duoc2Img from "@/assets/images/herbal/Duoc2.jpg";
+import duoc3Img from "@/assets/images/herbal/Duoc3.jpg";
 import banner1Img from "@/assets/images/banners/banner1.jpg";
 import banner2Img from "@/assets/images/banners/banner2.jpg";
 import banner3Img from "@/assets/images/banners/banner3.jpg";
@@ -36,6 +36,15 @@ const BANNER_SLIDES = [
     alt: "Opodis Pharma - Chuẩn sạch cho phái mạnh",
   },
 ];
+
+const PRODUCT_CATEGORIES = [
+  { id: "premium", label: "OPODIS FAMILY PREMIUM", icon: "✨" },
+  { id: "mom-baby", label: "CHĂM SÓC MẸ VÀ BÉ", icon: "👶" },
+  { id: "family", label: "CHĂM SÓC GIA ĐÌNH", icon: "🏡" },
+  { id: "antiseptic", label: "KHỬ KHUẨN – SÁT KHUẨN", icon: "🧴" },
+  { id: "herbal", label: "CHĂM SÓC THẢO DƯỢC", icon: "🌿" },
+  { id: "medical-antiseptic", label: "SÁT KHUẨN Y TẾ", icon: "🏥" },
+] as const;
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -94,21 +103,46 @@ const HomePage = () => {
         <section className="content-section" aria-label="Sản phẩm nổi bật">
           <div className="featured-header">
             <div>
-              <span className="eyebrow">SẢN PHẨM NỔI BẬT</span>
-              <h2 className="featured-header__title">Lựa chọn được tin dùng nhất</h2>
+              <h2 className="featured-header__title">SẢN PHẨM NỔI BẬT</h2>
+              <p className="featured-header__subtitle">Lựa chọn được tin dùng nhất</p>
             </div>
-            <button
-              type="button"
-              className="featured-header__all-btn"
-              onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
-            >
-              Xem tất cả ({PRODUCTS.length}) <span aria-hidden="true">→</span>
-            </button>
           </div>
 
+          <nav className="featured-categories" aria-label="Danh mục sản phẩm nổi bật">
+            <button
+              type="button"
+              className="featured-category featured-category--sale"
+              onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
+            >
+              <span className="featured-category__icon" aria-hidden="true">🏷️</span>
+              <span className="featured-category__label">Sale</span>
+            </button>
+
+            {PRODUCT_CATEGORIES.map((category) => (
+              <button
+                key={category.id}
+                type="button"
+                className="featured-category"
+                onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
+                aria-label={`Xem danh mục ${category.label}`}
+              >
+                <span className="featured-category__icon" aria-hidden="true">{category.icon}</span>
+                <span className="featured-category__label">{category.label}</span>
+              </button>
+            ))}
+
+            <button
+              type="button"
+              className="featured-category featured-category--all"
+              onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
+            >
+              <span className="featured-category__icon" aria-hidden="true">▦</span>
+              <span className="featured-category__label">Xem tất cả</span>
+            </button>
+          </nav>
+
           <p className="catalog-status">
-            4 sản phẩm tiêu biểu của Opodis Pharma{" "}
-            <span className="catalog-status__note">(*Giá minh họa bài test)</span>
+            Các sản phẩm tiêu biểu của Opodis Pharma{" "}
           </p>
 
           <div className="product-grid">
@@ -148,7 +182,7 @@ const HomePage = () => {
             <div className="herbal-card">
               <div className="herbal-card__media">
                 <img
-                  src={cajuputImg}
+                  src={duoc1Img}
                   alt="Tinh dầu Tràm Gió & α-Terpineol"
                   className="herbal-card__img"
                   loading="lazy"
@@ -165,7 +199,7 @@ const HomePage = () => {
             <div className="herbal-card">
               <div className="herbal-card__media">
                 <img
-                  src={betelImg}
+                  src={duoc2Img}
                   alt="Cao Trầu Không & Dược liệu"
                   className="herbal-card__img"
                   loading="lazy"
@@ -182,7 +216,7 @@ const HomePage = () => {
             <div className="herbal-card">
               <div className="herbal-card__media">
                 <img
-                  src={labGmpImg}
+                  src={duoc3Img}
                   alt="Chuẩn hóa GMP-WHO"
                   className="herbal-card__img"
                   loading="lazy"
@@ -198,80 +232,33 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* --- Hành trình 20 năm --- */}
+        {/* --- Lịch sử phát triển --- */}
         <section className="journey-section" aria-labelledby="journey-title">
           <div className="journey-header">
-            <span className="eyebrow">LỊCH SỬ PHÁT TRIỂN</span>
             <h2 id="journey-title" className="journey-title">
-              Hành trình hơn 20 năm đồng hành cùng sức khỏe
+              OPODISPHARMA
             </h2>
             <p className="journey-desc">
-              Khi khoa học gặp gỡ thiên nhiên Việt – từng bước khẳng định uy tín với hệ thống bệnh viện và người tiêu dùng.
+              Opodis Pharma luôn tâm niệm rằng tất cả mọi người đều có quyền sử dụng và tận hưởng
+              những sản phẩm chất lượng tốt. Vì thế, chúng tôi luôn tận tâm và sáng tạo nhằm mang
+              đến những sản phẩm chất lượng cao phục vụ nhu cầu phòng ngừa bệnh và chăm sóc sức
+              khỏe cộng đồng.
             </p>
           </div>
 
-          <div className="journey-timeline">
-            <div className="journey-item">
-              <div className="journey-item__marker">
-                <span className="journey-item__icon">🏛️</span>
-              </div>
-              <div className="journey-item__content">
-                <span className="journey-item__year">Tiền thân</span>
-                <h4 className="journey-item__title">Công ty Dược liệu Trung Ương 2</h4>
-                <p className="journey-item__desc">
-                  Đặt nền móng nghiên cứu dược liệu bản địa Việt Nam, kế thừa tinh hoa khoa học từ các dược sĩ đầu ngành.
-                </p>
-              </div>
+          <div className="journey-stats" aria-label="Dấu ấn phát triển của Opodis Pharma">
+            <div className="journey-stat">
+              <strong className="journey-stat__value">20+</strong>
+              <span className="journey-stat__label">Năm nghiên cứu &amp; phát triển</span>
             </div>
-
-            <div className="journey-item">
-              <div className="journey-item__marker">
-                <span className="journey-item__icon">🌿</span>
-              </div>
-              <div className="journey-item__content">
-                <span className="journey-item__year">Nghiên cứu đột phá</span>
-                <h4 className="journey-item__title">Chiết xuất hoạt chất α-Terpineol</h4>
-                <p className="journey-item__desc">
-                  Thương mại hóa thành công sản phẩm tắm gội trẻ em Phytobebe và dung dịch vệ sinh Phytogyno tin cậy cho phụ nữ.
-                </p>
-              </div>
+            <div className="journey-stat">
+              <strong className="journey-stat__value">30+</strong>
+              <span className="journey-stat__label">Sản phẩm uy tín trên thị trường</span>
             </div>
-
-            <div className="journey-item">
-              <div className="journey-item__marker">
-                <span className="journey-item__icon">🏭</span>
-              </div>
-              <div className="journey-item__content">
-                <span className="journey-item__year">Chuẩn hóa</span>
-                <h4 className="journey-item__title">Nhà máy GMP-WHO & ISO 13485</h4>
-                <p className="journey-item__desc">
-                  Xây dựng cụm nhà máy hiện đại tại KCN Linh Trung III (Tây Ninh), khép kín quy trình từ chiết xuất đến đóng gói.
-                </p>
-              </div>
+            <div className="journey-stat">
+              <strong className="journey-stat__value">80+</strong>
+              <span className="journey-stat__label">Bệnh viện lựa chọn &amp; tin dùng</span>
             </div>
-
-            <div className="journey-item">
-              <div className="journey-item__marker">
-                <span className="journey-item__icon">🏥</span>
-              </div>
-              <div className="journey-item__content">
-                <span className="journey-item__year">Hiện tại</span>
-                <h4 className="journey-item__title">80+ Bệnh viện và Cơ sở Y tế</h4>
-                <p className="journey-item__desc">
-                  Hơn 30 sản phẩm uy tín, phục vụ sát khuẩn y tế chuyên sâu và chăm sóc sức khỏe gia đình khắp cả nước.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="journey-cta">
-            <button
-              type="button"
-              className="button button--secondary"
-              onClick={() => navigate(ROUTES.ABOUT, { animate: true, direction: "forward" })}
-            >
-              Tìm hiểu thêm về Opodis Pharma <span aria-hidden="true">→</span>
-            </button>
           </div>
         </section>
       </main>

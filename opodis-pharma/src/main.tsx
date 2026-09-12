@@ -1,4 +1,10 @@
 import "zmp-ui/zaui.css";
+import "@fontsource/nunito/400.css";
+import "@fontsource/nunito/500.css";
+import "@fontsource/nunito/600.css";
+import "@fontsource/nunito/700.css";
+import "@fontsource/nunito/800.css";
+import "@fontsource/nunito/900.css";
 import "@/styles/tokens.css";
 import "@/styles/globals.css";
 import "@/styles/utilities.css";

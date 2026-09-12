@@ -15,6 +15,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
 
   const isAntiseptic = product.category.toLowerCase().includes("khử khuẩn") || product.category.toLowerCase().includes("sát khuẩn");
+  const hasDiscount = Boolean(product.originalPrice && product.originalPrice > product.price);
+  const discountPercent = hasDiscount
+    ? Math.round((1 - product.price / product.originalPrice!) * 100)
+    : 0;
 
   return (
     <article
@@ -38,6 +42,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
         >
           {isAntiseptic ? "Sát khuẩn Y tế" : "Chăm sóc Thảo dược"}
         </span>
+        {hasDiscount ? (
+          <span className="product-card__discount">-{discountPercent}%</span>
+        ) : null}
         <img
           className="product-card__image"
           src={product.image}
@@ -54,7 +61,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="product-card__footer">
           <div className="product-card__price-wrap">
             <span className="product-card__price">{formatCurrency(product.price)}</span>
-            <span className="product-card__price-hint">Giá test</span>
+            {hasDiscount ? (
+              <span className="product-card__original-price">
+                {formatCurrency(product.originalPrice!)}
+              </span>
+            ) : null}
           </div>
           <span className="product-card__btn" aria-hidden="true">
             Chi tiết
