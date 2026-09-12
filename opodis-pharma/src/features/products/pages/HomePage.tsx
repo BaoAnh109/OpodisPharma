@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Page, useNavigate } from "zmp-ui";
 
-import duoc1Img from "@/assets/images/herbal/Duoc1.jpg";
-import duoc2Img from "@/assets/images/herbal/Duoc2.jpg";
-import duoc3Img from "@/assets/images/herbal/Duoc3.jpg";
-import banner1Img from "@/assets/images/banners/banner1.jpg";
-import banner2Img from "@/assets/images/banners/banner2.jpg";
-import banner3Img from "@/assets/images/banners/banner3.jpg";
-import banner4Img from "@/assets/images/banners/banner4.jpg";
-import oaLogoImg from "@/assets/images/brand/oa-logo.png";
+import duoc1Img from "@/assets/images/herbal/Duoc1.webp";
+import duoc2Img from "@/assets/images/herbal/Duoc2.webp";
+import duoc3Img from "@/assets/images/herbal/Duoc3.webp";
+import banner1Img from "@/assets/images/banners/banner1.webp";
+import banner2Img from "@/assets/images/banners/banner2.webp";
+import banner3Img from "@/assets/images/banners/banner3.webp";
+import banner4Img from "@/assets/images/banners/banner4.webp";
+import oaLogoImg from "@/assets/images/brand/oa-logo.webp";
 import { BRAND } from "@/shared/constants/brand";
 import { ROUTES } from "@/shared/constants/routes";
 import {

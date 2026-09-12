@@ -1,4 +1,4 @@
-import avatar from "@/assets/avatar/avatar.jpg";
+import avatar from "@/assets/avatar/avatar.webp";
 
 export interface UserProfile {
   id: string;

@@ -14,6 +14,11 @@ export const BRAND = {
     mobile: "0789 394 239",
     hotline: "0789 394 239",
     website: "https://opodispharma.com/",
+    triNghia: {
+      name: "CÔNG TY TNHH DƯỢC PHẨM - DƯỢC LIỆU TRÍ NGHĨA",
+      address: "Số 15 đường số 4, KDC Intresco, Bình Hưng, Bình Chánh, TP.HCM, Việt Nam",
+      phone: "(0283) 7582 741",
+    },
   },
   social: {
     messenger: "https://m.me/678768355318156",

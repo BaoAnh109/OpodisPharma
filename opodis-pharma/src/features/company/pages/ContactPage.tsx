@@ -55,7 +55,7 @@ const ContactPage = () => {
         </div>
 
         {/* Facilities & Address Cards */}
-        <section className="mt-6 grid gap-[14px]" aria-label="Địa chỉ trụ sở và nhà máy">
+        <section className="mt-6 grid gap-[14px]" aria-label="Địa chỉ trụ sở, nhà máy và đơn vị liên quan">
           <div className="rounded-lg border border-border bg-surface px-[18px] py-4">
             <div className="mb-1.5 text-[11.5px] font-black tracking-[0.5px] text-primary-dark">
               🏭 NHÀ MÁY SẢN XUẤT GMP-WHO
@@ -66,6 +66,21 @@ const ContactPage = () => {
             </p>
             <p className="mt-2 text-[12px] leading-[1.6] text-text-secondary">
               Khu phức hợp sản xuất dược phẩm và hóa mỹ phẩm đạt chuẩn GMP-WHO và ISO 13485:2016, đảm bảo kiểm soát chất lượng từ khâu nguyên liệu đến thành phẩm.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-border bg-surface px-[18px] py-4">
+            <div className="mb-1.5 text-[11.5px] font-black tracking-[0.5px] text-primary-dark">
+              🏢 ĐƠN VỊ LIÊN QUAN
+            </div>
+            <h3 className="m-0 text-[16px] font-black leading-[1.45]">
+              {BRAND.company.triNghia.name}
+            </h3>
+            <p className="mt-1.5 text-[13px] font-semibold text-primary-deep">
+              📍 {BRAND.company.triNghia.address}
+            </p>
+            <p className="mt-2 text-[12px] leading-[1.6] text-text-secondary">
+              Tel: {BRAND.company.triNghia.phone}
             </p>
           </div>
 

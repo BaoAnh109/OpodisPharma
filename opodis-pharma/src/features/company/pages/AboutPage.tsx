@@ -17,7 +17,10 @@ const AboutPage = () => {
   return (
     <Page className={PAGE_SHELL_CLASS} name="about" resetScroll>
       <main className={PAGE_CONTENT_CLASS}>
-        <section className="rounded-xl bg-primary-soft px-5 py-[25px]" aria-labelledby="about-title">
+        <section
+          className="rounded-xl bg-[linear-gradient(135deg,#f4fcf9_0%,#d6f2e7_52%,#a9dfcf_100%)] px-5 py-[25px]"
+          aria-labelledby="about-title"
+        >
           <span className="text-[clamp(16px,4.6vw,19px)] font-black uppercase leading-[1.35] tracking-[0.4px] text-primary-dark">
             HÀNH TRÌNH PHÁT TRIỂN
           </span>

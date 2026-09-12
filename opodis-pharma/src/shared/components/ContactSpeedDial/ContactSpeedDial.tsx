@@ -1,25 +1,13 @@
 import React, { useEffect } from "react";
 import { Icon } from "zmp-ui";
 
+import zaloIcon from "@/assets/images/brand/zalo.webp";
 import { BRAND } from "@/shared/constants/brand";
 import { useContactSpeedDial } from "@/shared/state/contactState";
 
 const MessengerIcon = () => (
   <svg viewBox="0 0 24 24" width="23" height="23" fill="white" aria-hidden="true">
     <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.455 5.512 3.734 7.214V22l3.376-1.854c.915.254 1.884.392 2.89.392 5.523 0 10-4.145 10-9.258C22 6.145 17.523 2 12 2zm1.055 12.438l-2.697-2.88-5.263 2.88 5.79-6.146 2.766 2.88 5.194-2.88-5.79 6.146z" />
-  </svg>
-);
-
-const ZaloIcon = () => (
-  <svg viewBox="0 0 36 36" width="24" height="24" fill="none" aria-hidden="true">
-    <path
-      d="M18 5C11.373 5 6 10.025 6 16.223c0 3.465 1.688 6.574 4.35 8.616L9.2 29.5l4.89-1.756C15.342 28.196 16.643 28.5 18 28.5c6.627 0 12-5.025 12-11.223S24.627 5 18 5z"
-      fill="#ffffff"
-    />
-    <path
-      d="M11 19.4h3.4l-2.6-3.8c-.2-.3-.2-.7 0-.9.2-.2.6-.4 1-.4h3.8v1.4h-2.9l2.6 3.8c.2.2.2.7 0 .9-.2.2-.6.4-1 .4H11v-1.4zm6.5-5.1h1.5v5.1h-1.5v-5.1zm4.2 0h1.5v3.7h2.2v1.4h-3.7v-5.1zm5.2 2.6c0-1.5 1.1-2.7 2.6-2.7 1.5 0 2.6 1.2 2.6 2.7s-1.1 2.7-2.6 2.7c-1.5 0-2.6-1.2-2.6-2.7zm3.8 0c0-.8-.5-1.4-1.2-1.4s-1.2.6-1.2 1.4.5 1.4 1.2 1.4 1.2-.6 1.2-1.4z"
-      fill="#0068ff"
-    />
   </svg>
 );
 
@@ -70,8 +58,12 @@ const ContactSpeedDial: React.FC = () => {
   };
 
   const labelClass = isOpen
-    ? "pointer-events-none absolute right-[calc(100%+12px)] translate-x-0 rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.88)] px-[10px] py-1 text-[11px] font-bold text-white opacity-100 shadow-[0_2px_8px_rgba(0,0,0,0.2)] backdrop-blur-[8px] transition-[opacity,transform] duration-200"
-    : "pointer-events-none absolute right-[calc(100%+12px)] translate-x-[6px] rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.88)] px-[10px] py-1 text-[11px] font-bold text-white opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.2)] backdrop-blur-[8px] transition-[opacity,transform] duration-200";
+    ? "pointer-events-none absolute right-[calc(100%+12px)] top-1/2 z-[2] -translate-y-1/2 translate-x-0 whitespace-nowrap rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.88)] px-[10px] py-1 text-[11px] font-bold text-white opacity-100 shadow-[0_2px_8px_rgba(0,0,0,0.2)] backdrop-blur-[8px] transition-[opacity,transform] duration-200"
+    : "pointer-events-none absolute right-[calc(100%+12px)] top-1/2 z-[2] -translate-y-1/2 translate-x-[6px] whitespace-nowrap rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.88)] px-[10px] py-1 text-[11px] font-bold text-white opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.2)] backdrop-blur-[8px] transition-[opacity,transform] duration-200";
+
+  const messengerLabelClass = isOpen
+    ? "pointer-events-none absolute bottom-[calc(100%+8px)] left-[calc(50%_-_15px)] z-[2] -translate-x-1/2 translate-y-0 whitespace-nowrap rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.88)] px-[10px] py-1 text-[11px] font-bold text-white opacity-100 shadow-[0_2px_8px_rgba(0,0,0,0.2)] backdrop-blur-[8px] transition-[opacity,transform] duration-200"
+    : "pointer-events-none absolute bottom-[calc(100%+8px)] left-[calc(50%_-_15px)] z-[2] -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full border border-[rgba(255,255,255,0.12)] bg-[rgba(15,23,42,0.88)] px-[10px] py-1 text-[11px] font-bold text-white opacity-0 shadow-[0_2px_8px_rgba(0,0,0,0.2)] backdrop-blur-[8px] transition-[opacity,transform] duration-200";
 
   return (
     <div className="relative z-[120]">
@@ -96,7 +88,6 @@ const ContactSpeedDial: React.FC = () => {
           <div className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[radial-gradient(circle_at_35%_35%,#9b59b6,#6c3483)] shadow-[0_0_0_7px_rgba(123,44,191,0.24),0_4px_14px_rgba(123,44,191,0.45)] transition-[transform,filter] duration-[160ms] active:scale-[0.92] active:brightness-110">
             <MessengerIcon />
           </div>
-          <span className={labelClass}>Messenger</span>
         </a>
 
         <a
@@ -109,8 +100,9 @@ const ContactSpeedDial: React.FC = () => {
           tabIndex={isOpen ? 0 : -1}
         >
           <div className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[rgba(255,255,255,0.9)] bg-[radial-gradient(circle_at_35%_35%,#29b6f6,#0068ff)] shadow-[0_0_0_7px_rgba(0,104,255,0.24),0_4px_14px_rgba(0,104,255,0.45)] transition-[transform,filter] duration-[160ms] active:scale-[0.92] active:brightness-110">
-            <ZaloIcon />
+            <img className="h-7 w-7 object-contain" src={zaloIcon} alt="" aria-hidden="true" />
           </div>
+          <span className={messengerLabelClass}>Messenger</span>
           <span className={labelClass}>Chat Zalo</span>
         </a>
 

@@ -1,6 +1,6 @@
 import { Avatar, useNavigate } from "zmp-ui";
 
-import logo from "@/assets/images/brand/opodis-logo_full.png";
+import logo from "@/assets/images/brand/opodis-logo_full.webp";
 import { ROUTES } from "@/shared/constants/routes";
 import { MOCK_USER } from "@/shared/constants/user.mock";
 
