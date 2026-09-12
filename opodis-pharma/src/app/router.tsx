@@ -13,6 +13,7 @@ import { ROUTES } from "@/shared/constants/routes";
 import AppHeader from "@/shared/components/AppHeader/AppHeader";
 import BottomNav from "@/shared/components/BottomNav/BottomNav";
 import ContactSpeedDial from "@/shared/components/ContactSpeedDial/ContactSpeedDial";
+import SwipeBack from "@/shared/components/SwipeBack/SwipeBack";
 
 const Router = () => {
   return (
@@ -27,6 +28,7 @@ const Router = () => {
       </AnimationRoutes>
       <BottomNav />
       <ContactSpeedDial />
+      <SwipeBack />
     </ZMPRouter>
   );
 };
