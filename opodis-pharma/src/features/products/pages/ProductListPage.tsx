@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Icon, Page } from "zmp-ui";
 
 import EmptyState from "@/shared/components/EmptyState/EmptyState";
@@ -7,22 +7,81 @@ import SectionTitle from "@/shared/components/SectionTitle/SectionTitle";
 import ProductGrid from "../components/ProductGrid/ProductGrid";
 import { PRODUCTS } from "../data/products.mock";
 
-type CategoryFilter = "all" | "mom-baby" | "antiseptic";
+const ALL_CATEGORY = "all";
+const SALE_CATEGORY = "sale";
+const MOM_BABY_CATEGORY = "Chăm sóc mẹ và bé";
+const ANTISEPTIC_CATEGORY = "Khử khuẩn – sát khuẩn tay";
 
 const ProductListPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(ALL_CATEGORY);
+  const [searchInput, setSearchInput] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const categoryMenuRef = useRef<HTMLDivElement>(null);
+
+  const categoryOptions = useMemo(() => {
+    const productCategories = Array.from(new Set(PRODUCTS.map((product) => product.category)));
+
+    return [
+      {
+        id: ALL_CATEGORY,
+        label: "Tất cả sản phẩm",
+        icon: "▦",
+        count: PRODUCTS.length,
+      },
+      {
+        id: SALE_CATEGORY,
+        label: "Sản phẩm đang Sale",
+        icon: "🏷️",
+        count: PRODUCTS.filter(
+          (product) => product.originalPrice && product.originalPrice > product.price,
+        ).length,
+      },
+      ...productCategories.map((category) => ({
+        id: category,
+        label: category,
+        icon: category.toLowerCase().includes("mẹ và bé") ? "👶" : "🧴",
+        count: PRODUCTS.filter((product) => product.category === category).length,
+      })),
+    ];
+  }, []);
+
+  useEffect(() => {
+    if (!isCategoryMenuOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        categoryMenuRef.current &&
+        !categoryMenuRef.current.contains(event.target as Node)
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsCategoryMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsCategoryMenuOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isCategoryMenuOpen]);
 
   const filteredProducts = PRODUCTS.filter((product) => {
     // Filter by category
-    if (selectedCategory === "mom-baby") {
-      if (!product.category.toLowerCase().includes("mẹ và bé")) return false;
-    } else if (selectedCategory === "antiseptic") {
-      if (
-        !product.category.toLowerCase().includes("sát khuẩn") &&
-        !product.category.toLowerCase().includes("khử khuẩn")
-      )
-        return false;
+    if (selectedCategory === SALE_CATEGORY) {
+      if (!product.originalPrice || product.originalPrice <= product.price) return false;
+    } else if (
+      selectedCategory !== ALL_CATEGORY &&
+      product.category !== selectedCategory
+    ) {
+      return false;
     }
 
     // Filter by search query
@@ -49,55 +108,152 @@ const ProductListPage = () => {
           />
 
           {/* Search Box */}
-          <div className="search-bar">
-            <span className="search-bar__icon">
-              <Icon icon="zi-search" size={18} />
-            </span>
-            <input
-              type="text"
-              className="search-bar__input"
-              placeholder="Tìm theo tên sản phẩm, công dụng, thành phần..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Tìm kiếm sản phẩm"
-            />
-            {searchQuery ? (
-              <button
-                type="button"
-                className="search-bar__clear"
-                onClick={() => setSearchQuery("")}
-                aria-label="Xóa tìm kiếm"
+          <form
+            className="catalog-search-form"
+            role="search"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setSearchQuery(searchInput.trim());
+            }}
+          >
+            <div className="search-bar">
+              <span className="search-bar__icon">
+                <Icon icon="zi-search" size={18} />
+              </span>
+              <input
+                type="text"
+                className="search-bar__input"
+                placeholder="Tìm tên, công dụng, thành phần..."
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                aria-label="Tìm kiếm sản phẩm"
+              />
+              {searchInput ? (
+                <button
+                  type="button"
+                  className="search-bar__clear"
+                  onClick={() => {
+                    setSearchInput("");
+                    setSearchQuery("");
+                  }}
+                  aria-label="Xóa tìm kiếm"
+                >
+                  ✕
+                </button>
+              ) : null}
+            </div>
+            <button type="submit" className="catalog-search-form__submit">
+              <span>Tìm</span>
+            </button>
+          </form>
+
+          {/* Dropdown category menu */}
+          <div
+            ref={categoryMenuRef}
+            className={`category-filter ${isCategoryMenuOpen ? "is-open" : ""}`}
+          >
+            <button
+              type="button"
+              className="category-filter__trigger"
+              onClick={() => setIsCategoryMenuOpen((isOpen) => !isOpen)}
+              aria-expanded={isCategoryMenuOpen}
+              aria-controls="product-category-menu"
+            >
+              <span className="category-filter__trigger-main">
+                <Icon icon="zi-more-grid" size={20} />
+                <span className="category-filter__trigger-label">Danh mục</span>
+              </span>
+              <span
+                className={`category-filter__chevron ${isCategoryMenuOpen ? "is-open" : ""}`}
+                aria-hidden="true"
               >
-                ✕
-              </button>
+                <svg
+                  viewBox="0 0 16 16"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3.75 6L8 10.25L12.25 6"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </button>
+
+            {isCategoryMenuOpen ? (
+              <div
+                id="product-category-menu"
+                className="category-filter__menu"
+                role="menu"
+                aria-label="Chọn danh mục sản phẩm"
+              >
+                <div className="category-filter__menu-header">
+                  <strong>Chọn danh mục</strong>
+                  <span>{categoryOptions.length} lựa chọn</span>
+                </div>
+
+                <div className="category-filter__menu-list">
+                  {categoryOptions.map((category) => {
+                    const isSelected = selectedCategory === category.id;
+
+                    return (
+                      <button
+                        key={category.id}
+                        type="button"
+                        className={`category-filter__item ${isSelected ? "is-selected" : ""}`}
+                        onClick={() => {
+                          setSelectedCategory(category.id);
+                          setIsCategoryMenuOpen(false);
+                        }}
+                        role="menuitemradio"
+                        aria-checked={isSelected}
+                      >
+                        <span className="category-filter__item-icon" aria-hidden="true">
+                          {category.icon}
+                        </span>
+                        <span className="category-filter__item-label">{category.label}</span>
+                        <span className="category-filter__item-count">{category.count}</span>
+                        <span className="category-filter__item-check" aria-hidden="true">
+                          {isSelected ? "✓" : ""}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             ) : null}
           </div>
 
-          {/* Category Filter Chips */}
-          <div className="category-pills" role="tablist" aria-label="Lọc theo danh mục">
+          {/* Quick category filter chips */}
+          <div className="category-pills" role="tablist" aria-label="Lọc nhanh theo danh mục">
             <button
               type="button"
-              className={`category-pill ${selectedCategory === "all" ? "is-active" : ""}`}
-              onClick={() => setSelectedCategory("all")}
-              aria-selected={selectedCategory === "all"}
+              className={`category-pill ${selectedCategory === ALL_CATEGORY ? "is-active" : ""}`}
+              onClick={() => setSelectedCategory(ALL_CATEGORY)}
+              aria-selected={selectedCategory === ALL_CATEGORY}
             >
               Tất cả ({PRODUCTS.length})
             </button>
             <button
               type="button"
-              className={`category-pill ${selectedCategory === "mom-baby" ? "is-active" : ""}`}
-              onClick={() => setSelectedCategory("mom-baby")}
-              aria-selected={selectedCategory === "mom-baby"}
+              className={`category-pill ${selectedCategory === MOM_BABY_CATEGORY ? "is-active" : ""}`}
+              onClick={() => setSelectedCategory(MOM_BABY_CATEGORY)}
+              aria-selected={selectedCategory === MOM_BABY_CATEGORY}
             >
-              👶 Mẹ và bé (4)
+              👶 Mẹ và bé ({PRODUCTS.filter((product) => product.category === MOM_BABY_CATEGORY).length})
             </button>
             <button
               type="button"
-              className={`category-pill ${selectedCategory === "antiseptic" ? "is-active" : ""}`}
-              onClick={() => setSelectedCategory("antiseptic")}
-              aria-selected={selectedCategory === "antiseptic"}
+              className={`category-pill ${selectedCategory === ANTISEPTIC_CATEGORY ? "is-active" : ""}`}
+              onClick={() => setSelectedCategory(ANTISEPTIC_CATEGORY)}
+              aria-selected={selectedCategory === ANTISEPTIC_CATEGORY}
             >
-              🧴 Sát khuẩn y tế (2)
+              🧴 Sát khuẩn y tế ({PRODUCTS.filter((product) => product.category === ANTISEPTIC_CATEGORY).length})
             </button>
           </div>
 
@@ -106,7 +262,6 @@ const ProductListPage = () => {
             <>
               <p className="catalog-status">
                 Hiển thị <strong>{filteredProducts.length}</strong> sản phẩm{" "}
-                <span className="catalog-status__note">(*Giá minh họa bài test)</span>
               </p>
               <ProductGrid products={filteredProducts} />
             </>
@@ -116,8 +271,9 @@ const ProductListPage = () => {
               description={`Không có sản phẩm nào phù hợp với từ khóa "${searchQuery}". Vui lòng thử lại.`}
               actionLabel="Xem tất cả sản phẩm"
               onAction={() => {
+                setSearchInput("");
                 setSearchQuery("");
-                setSelectedCategory("all");
+                setSelectedCategory(ALL_CATEGORY);
               }}
             />
           )}
