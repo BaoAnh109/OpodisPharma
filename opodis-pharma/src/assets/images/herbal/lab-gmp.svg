@@ -1,0 +1,16 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#EBF6F9"/>
+  <circle cx="60" cy="60" r="42" fill="#D5EFF5" opacity="0.6"/>
+  <!-- Laboratory Flask -->
+  <path d="M55 32H65V46L78 72C80.5 77 77 84 70 84H50C43 84 39.5 77 42 72L55 46V32Z" fill="#0E7490"/>
+  <!-- Liquid in flask -->
+  <path d="M44.5 77C47 82 52 82 60 82C68 82 73 82 75.5 77L69 64C65 66 63 64 60 64C57 64 55 66 51 64L44.5 77Z" fill="#00A878"/>
+  <!-- Bubbles -->
+  <circle cx="56" cy="72" r="2.5" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="64" cy="75" r="1.5" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="60" cy="68" r="1.5" fill="#FFFFFF" opacity="0.8"/>
+  <!-- Quality Shield Badge -->
+  <path d="M74 34L86 38V48C86 56 80 62 74 65C68 62 62 56 62 48V38L74 34Z" fill="#C59B27"/>
+  <!-- Checkmark inside shield -->
+  <path d="M69 48L73 52L79 44" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

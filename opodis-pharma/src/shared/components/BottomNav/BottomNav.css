@@ -1,0 +1,101 @@
+.bottom-nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(0, 168, 120, 0.12);
+  box-shadow: 0 -4px 20px rgba(10, 38, 28, 0.06);
+  padding-bottom: env(safe-area-inset-bottom, 10px);
+}
+
+.bottom-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 520px;
+  height: var(--bottom-nav-height, 64px);
+  margin: 0 auto;
+  padding: 0 8px;
+}
+
+.bottom-nav__item {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+  height: 100%;
+  padding: 6px 4px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 180ms ease, transform 140ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav__item:active {
+  transform: scale(0.92);
+}
+
+.bottom-nav__icon-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 28px;
+  border-radius: 999px;
+  transition: background-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.bottom-nav__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.bottom-nav__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: color 200ms ease, font-weight 200ms ease;
+}
+
+/* Active State */
+.bottom-nav__item.is-active {
+  color: var(--color-primary-dark);
+}
+
+.bottom-nav__item.is-active .bottom-nav__icon-wrapper {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.bottom-nav__item.is-active .bottom-nav__label {
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.bottom-nav__item.is-active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--color-primary);
+}

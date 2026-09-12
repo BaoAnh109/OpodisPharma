@@ -1,0 +1,15 @@
+{
+  "app": {
+    "title": "Opodis Pharma",
+    "headerColor": "#FFFFFF",
+    "headerTitle": "Opodis Pharma",
+    "textColor": "black",
+    "statusBar": "normal",
+    "actionBarHidden": true,
+    "hideIOSSafeAreaBottom": true,
+    "hideAndroidBottomNavigationBar": false
+  },
+  "listCSS": [],
+  "listSyncJS": [],
+  "listAsyncJS": []
+}
