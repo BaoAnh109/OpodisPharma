@@ -4,8 +4,12 @@ export interface Product {
   category: string;
   volume: string;
   image: string;
+  gallery?: string[];
   price: number;
   originalPrice?: number;
+  rating?: number;
+  reviewsCount?: number;
+  soldCount?: string;
   shortDescription: string;
   ingredients: string[];
   benefits: string[];

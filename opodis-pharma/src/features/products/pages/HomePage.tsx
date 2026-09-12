@@ -8,7 +8,9 @@ import banner1Img from "@/assets/images/banners/banner1.jpg";
 import banner2Img from "@/assets/images/banners/banner2.jpg";
 import banner3Img from "@/assets/images/banners/banner3.jpg";
 import banner4Img from "@/assets/images/banners/banner4.jpg";
+import oaLogoImg from "@/assets/images/brand/oa-logo.png";
 import SectionTitle from "@/shared/components/SectionTitle/SectionTitle";
+import { BRAND } from "@/shared/constants/brand";
 import { ROUTES } from "@/shared/constants/routes";
 
 import ProductCard from "../components/ProductCard/ProductCard";
@@ -100,48 +102,78 @@ const HomePage = () => {
         </section>
 
         {/* --- Featured Products (Tối đa 4 sản phẩm) --- */}
-        <section className="content-section" aria-label="Sản phẩm nổi bật">
-          <div className="featured-header">
+        <section className="content-section" aria-label="Danh mục nổi bật">
+          <div className="featured-category-section">
+            <div className="featured-header featured-header--center">
+              <div>
+                <h2 className="featured-header__title">DANH MỤC NỔI BẬT</h2>
+              </div>
+            </div>
+
+            <nav className="featured-categories" aria-label="Danh mục sản phẩm nổi bật">
+              <button
+                type="button"
+                className="featured-category featured-category--sale"
+                onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
+              >
+                <span className="featured-category__icon" aria-hidden="true">🏷️</span>
+                <span className="featured-category__label">Sale</span>
+              </button>
+
+              {PRODUCT_CATEGORIES.map((category) => (
+                <button
+                  key={category.id}
+                  type="button"
+                  className="featured-category"
+                  onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
+                  aria-label={`Xem danh mục ${category.label}`}
+                >
+                  <span className="featured-category__icon" aria-hidden="true">{category.icon}</span>
+                  <span className="featured-category__label">{category.label}</span>
+                </button>
+              ))}
+
+              <button
+                type="button"
+                className="featured-category featured-category--all"
+                onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
+              >
+                <span className="featured-category__icon" aria-hidden="true">▦</span>
+                <span className="featured-category__label">Xem tất cả</span>
+              </button>
+            </nav>
+          </div>
+
+          <a
+            className="zalo-follow-card"
+            href={BRAND.social.zalo}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Quan tâm Zalo Opodis Pharma"
+          >
+            <span className="zalo-follow-card__heading">Quan tâm OA để nhận các đặc quyền ưu đãi</span>
+            <span className="zalo-follow-card__profile">
+              <img
+                className="zalo-follow-card__logo"
+                src={oaLogoImg}
+                alt="Logo Opodis Pharma"
+                loading="lazy"
+              />
+              <span className="zalo-follow-card__content">
+                <strong className="zalo-follow-card__title">Trí Nghĩa Pharma</strong>
+                <span className="zalo-follow-card__description">Official Account</span>
+              </span>
+              <span className="zalo-follow-card__action">Quan tâm</span>
+            </span>
+          </a>
+          
+          <div className="featured-header featured-header--center">
             <div>
               <h2 className="featured-header__title">SẢN PHẨM NỔI BẬT</h2>
               <p className="featured-header__subtitle">Lựa chọn được tin dùng nhất</p>
             </div>
           </div>
-
-          <nav className="featured-categories" aria-label="Danh mục sản phẩm nổi bật">
-            <button
-              type="button"
-              className="featured-category featured-category--sale"
-              onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
-            >
-              <span className="featured-category__icon" aria-hidden="true">🏷️</span>
-              <span className="featured-category__label">Sale</span>
-            </button>
-
-            {PRODUCT_CATEGORIES.map((category) => (
-              <button
-                key={category.id}
-                type="button"
-                className="featured-category"
-                onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
-                aria-label={`Xem danh mục ${category.label}`}
-              >
-                <span className="featured-category__icon" aria-hidden="true">{category.icon}</span>
-                <span className="featured-category__label">{category.label}</span>
-              </button>
-            ))}
-
-            <button
-              type="button"
-              className="featured-category featured-category--all"
-              onClick={() => navigate(ROUTES.PRODUCTS, { animate: true, direction: "forward" })}
-            >
-              <span className="featured-category__icon" aria-hidden="true">▦</span>
-              <span className="featured-category__label">Xem tất cả</span>
-            </button>
-          </nav>
-
-          <p className="catalog-status">
+          <p className="catalog-status catalog-status--center">
             Các sản phẩm tiêu biểu của Opodis Pharma{" "}
           </p>
 

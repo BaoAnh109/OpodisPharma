@@ -11,11 +11,13 @@ const ALL_CATEGORY = "all";
 const SALE_CATEGORY = "sale";
 const MOM_BABY_CATEGORY = "Chăm sóc mẹ và bé";
 const ANTISEPTIC_CATEGORY = "Khử khuẩn – sát khuẩn tay";
+const PRODUCTS_PER_PAGE = 4;
 
 const ProductListPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>(ALL_CATEGORY);
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const categoryMenuRef = useRef<HTMLDivElement>(null);
 
@@ -97,6 +99,21 @@ const ProductListPage = () => {
     return true;
   });
 
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+  const pageStartIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const paginatedProducts = filteredProducts.slice(
+    pageStartIndex,
+    pageStartIndex + PRODUCTS_PER_PAGE,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+
   return (
     <Page className="page-shell" name="products" resetScroll>
       <main>
@@ -147,88 +164,6 @@ const ProductListPage = () => {
             </button>
           </form>
 
-          {/* Dropdown category menu */}
-          <div
-            ref={categoryMenuRef}
-            className={`category-filter ${isCategoryMenuOpen ? "is-open" : ""}`}
-          >
-            <button
-              type="button"
-              className="category-filter__trigger"
-              onClick={() => setIsCategoryMenuOpen((isOpen) => !isOpen)}
-              aria-expanded={isCategoryMenuOpen}
-              aria-controls="product-category-menu"
-            >
-              <span className="category-filter__trigger-main">
-                <Icon icon="zi-more-grid" size={20} />
-                <span className="category-filter__trigger-label">Danh mục</span>
-              </span>
-              <span
-                className={`category-filter__chevron ${isCategoryMenuOpen ? "is-open" : ""}`}
-                aria-hidden="true"
-              >
-                <svg
-                  viewBox="0 0 16 16"
-                  width="14"
-                  height="14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M3.75 6L8 10.25L12.25 6"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </button>
-
-            {isCategoryMenuOpen ? (
-              <div
-                id="product-category-menu"
-                className="category-filter__menu"
-                role="menu"
-                aria-label="Chọn danh mục sản phẩm"
-              >
-                <div className="category-filter__menu-header">
-                  <strong>Chọn danh mục</strong>
-                  <span>{categoryOptions.length} lựa chọn</span>
-                </div>
-
-                <div className="category-filter__menu-list">
-                  {categoryOptions.map((category) => {
-                    const isSelected = selectedCategory === category.id;
-
-                    return (
-                      <button
-                        key={category.id}
-                        type="button"
-                        className={`category-filter__item ${isSelected ? "is-selected" : ""}`}
-                        onClick={() => {
-                          setSelectedCategory(category.id);
-                          setIsCategoryMenuOpen(false);
-                        }}
-                        role="menuitemradio"
-                        aria-checked={isSelected}
-                      >
-                        <span className="category-filter__item-icon" aria-hidden="true">
-                          {category.icon}
-                        </span>
-                        <span className="category-filter__item-label">{category.label}</span>
-                        <span className="category-filter__item-count">{category.count}</span>
-                        <span className="category-filter__item-check" aria-hidden="true">
-                          {isSelected ? "✓" : ""}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
-          </div>
-
           {/* Quick category filter chips */}
           <div className="category-pills" role="tablist" aria-label="Lọc nhanh theo danh mục">
             <button
@@ -260,10 +195,132 @@ const ProductListPage = () => {
           {/* Product Grid or Empty State */}
           {filteredProducts.length > 0 ? (
             <>
-              <p className="catalog-status">
-                Hiển thị <strong>{filteredProducts.length}</strong> sản phẩm{" "}
-              </p>
-              <ProductGrid products={filteredProducts} />
+              <div className="catalog-status-row">
+                <p className="catalog-status">
+                  Hiển thị <strong>{pageStartIndex + 1}-{Math.min(pageStartIndex + PRODUCTS_PER_PAGE, filteredProducts.length)}</strong> / {filteredProducts.length} sản phẩm{" "}
+                </p>
+
+                {/* Dropdown category menu */}
+                <div
+                  ref={categoryMenuRef}
+                  className={`category-filter ${isCategoryMenuOpen ? "is-open" : ""}`}
+                >
+                  <button
+                    type="button"
+                    className="category-filter__trigger"
+                    onClick={() => setIsCategoryMenuOpen((isOpen) => !isOpen)}
+                    aria-expanded={isCategoryMenuOpen}
+                    aria-controls="product-category-menu"
+                  >
+                    <span className="category-filter__trigger-main">
+                      <Icon icon="zi-more-grid" size={20} />
+                      <span className="category-filter__trigger-label">Danh mục</span>
+                    </span>
+                    <span
+                      className={`category-filter__chevron ${isCategoryMenuOpen ? "is-open" : ""}`}
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        width="14"
+                        height="14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3.75 6L8 10.25L12.25 6"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+
+                  {isCategoryMenuOpen ? (
+                    <div
+                      id="product-category-menu"
+                      className="category-filter__menu"
+                      role="menu"
+                      aria-label="Chọn danh mục sản phẩm"
+                    >
+                      <div className="category-filter__menu-header">
+                        <strong>Chọn danh mục</strong>
+                        <span>{categoryOptions.length} lựa chọn</span>
+                      </div>
+
+                      <div className="category-filter__menu-list">
+                        {categoryOptions.map((category) => {
+                          const isSelected = selectedCategory === category.id;
+
+                          return (
+                            <button
+                              key={category.id}
+                              type="button"
+                              className={`category-filter__item ${isSelected ? "is-selected" : ""}`}
+                              onClick={() => {
+                                setSelectedCategory(category.id);
+                                setIsCategoryMenuOpen(false);
+                              }}
+                              role="menuitemradio"
+                              aria-checked={isSelected}
+                            >
+                              <span className="category-filter__item-icon" aria-hidden="true">
+                                {category.icon}
+                              </span>
+                              <span className="category-filter__item-label">{category.label}</span>
+                              <span className="category-filter__item-count">{category.count}</span>
+                              <span className="category-filter__item-check" aria-hidden="true">
+                                {isSelected ? "✓" : ""}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+              <ProductGrid products={paginatedProducts} />
+              {totalPages > 1 ? (
+                <nav className="product-pagination" aria-label="Phân trang sản phẩm">
+                  <button
+                    type="button"
+                    className="product-pagination__arrow"
+                    onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                    disabled={currentPage === 1}
+                    aria-label="Trang trước"
+                  >
+                    ‹
+                  </button>
+                  <div className="product-pagination__pages">
+                    {Array.from({ length: totalPages }, (_, index) => {
+                      const page = index + 1;
+                      return (
+                        <button
+                          key={page}
+                          type="button"
+                          className={`product-pagination__page ${currentPage === page ? "is-active" : ""}`}
+                          onClick={() => setCurrentPage(page)}
+                          aria-current={currentPage === page ? "page" : undefined}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    type="button"
+                    className="product-pagination__arrow"
+                    onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                    disabled={currentPage === totalPages}
+                    aria-label="Trang sau"
+                  >
+                    ›
+                  </button>
+                </nav>
+              ) : null}
             </>
           ) : (
             <EmptyState

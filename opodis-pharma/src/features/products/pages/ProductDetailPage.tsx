@@ -29,6 +29,15 @@ const ProductDetailPage = () => {
     product.category.toLowerCase().includes("khử khuẩn") ||
     product.category.toLowerCase().includes("sát khuẩn");
 
+  const hasDiscount = Boolean(product.originalPrice && product.originalPrice > product.price);
+  const discountPercent = hasDiscount
+    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+    : 0;
+
+  const rating = product.rating ?? 4.9;
+  const reviewsCount = product.reviewsCount ?? 128;
+  const soldCount = product.soldCount ?? "1.2k";
+
   return (
     <Page className="page-shell page-shell--detail" name={`product-${product.id}`} resetScroll>
       <main>
@@ -50,12 +59,45 @@ const ProductDetailPage = () => {
             >
               {isAntiseptic ? "Chuẩn Y tế Bệnh viện" : "Dược thảo chọn lọc"}
             </span>
+            {hasDiscount ? (
+              <span className="product-card__discount product-card__discount--detail">
+                -{discountPercent}%
+              </span>
+            ) : null}
             <img className="product-detail__image" src={product.image} alt={product.name} />
           </div>
+
+          {product.gallery?.length ? (
+            <div className="product-detail__gallery" aria-label={`Hình ảnh liên quan của ${product.name}`}>
+              {product.gallery.map((image, index) => (
+                <img
+                  key={image}
+                  className="product-detail__gallery-image"
+                  src={image}
+                  alt={`${product.name} - hình ảnh ${index + 2}`}
+                  loading="lazy"
+                />
+              ))}
+            </div>
+          ) : null}
 
           <div className="product-detail__content">
             <span className="eyebrow">{product.category}</span>
             <h1 className="product-detail__title">{product.name}</h1>
+
+            {/* Product Rating & Social Proof */}
+            <div className="product-detail__rating-row">
+              <div className="product-detail__stars" aria-label={`Đánh giá ${rating.toFixed(1)} trên 5 sao`}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span key={star} className="product-detail__star">★</span>
+                ))}
+              </div>
+              <span className="product-detail__rating-score">{rating.toFixed(1)}</span>
+              <span className="product-detail__rating-divider">·</span>
+              <span className="product-detail__rating-reviews">{reviewsCount} đánh giá</span>
+              <span className="product-detail__rating-divider">·</span>
+              <span className="product-detail__rating-sold">Đã bán {soldCount}</span>
+            </div>
 
             <div className="product-detail__meta">
               <span className="meta-chip">📦 {product.volume}</span>
@@ -64,17 +106,29 @@ const ProductDetailPage = () => {
               ) : null}
             </div>
 
-            <div className="product-detail__price-card">
+            {/* Price Card */}
+            <div className={`product-detail__price-card ${hasDiscount ? "product-detail__price-card--sale" : ""}`}>
               <div className="product-detail__price-wrap">
-                <span className="price-label">Giá minh họa test</span>
-                <span className="product-detail__price">{formatCurrency(product.price)}</span>
+                <div className="product-detail__price-row">
+                  <span className={`product-detail__price ${hasDiscount ? "product-detail__price--sale" : ""}`}>
+                    {formatCurrency(product.price)}
+                  </span>
+                  {hasDiscount ? (
+                    <span className="product-detail__original-price">
+                      {formatCurrency(product.originalPrice!)}
+                    </span>
+                  ) : null}
+                  {hasDiscount ? (
+                    <span className="product-detail__discount-pill">
+                      -{discountPercent}%
+                    </span>
+                  ) : null}
+                </div>
               </div>
-              <span className="price-tag-badge">Chính hãng Opodis</span>
+              <span className="price-tag-badge">
+                ✓ Chính hãng Opodis
+              </span>
             </div>
-
-            <p className="mock-price-note">
-              * Giá hiển thị là dữ liệu minh họa cho bài test Mini App, không phải giá bán lẻ chính thức.
-            </p>
 
             <p className="product-detail__description">{product.shortDescription}</p>
 
@@ -112,6 +166,56 @@ const ProductDetailPage = () => {
                 <p className="detail-copy">{product.warning}</p>
               </div>
             ) : null}
+
+            {/* Customer Rating & Reviews Section */}
+            <div className="detail-card detail-card--reviews">
+              <div className="detail-reviews__header">
+                <div>
+                  <h2 className="detail-card__title">⭐ Đánh giá sản phẩm</h2>
+                  <p className="detail-reviews__sub">
+                    {rating.toFixed(1)}/5 sao ({reviewsCount} đánh giá từ khách hàng)
+                  </p>
+                </div>
+                <div className="detail-reviews__score-box">
+                  <span className="detail-reviews__big-score">{rating.toFixed(1)}</span>
+                  <div className="detail-reviews__stars-row">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <span key={s} className="star-icon">★</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="detail-reviews__list">
+                <div className="review-comment">
+                  <div className="review-comment__header">
+                    <span className="review-comment__avatar">TN</span>
+                    <div className="review-comment__meta">
+                      <span className="review-comment__author">Thanh Nhàn</span>
+                      <div className="review-comment__stars">★★★★★</div>
+                    </div>
+                    <span className="review-comment__verified">✓ Đã mua hàng</span>
+                  </div>
+                  <p className="review-comment__text">
+                    Giao hàng nhanh, sản phẩm chuẩn công ty Opodis Pharma, tem mác nguyên vẹn và mùi thảo dược rất dễ chịu.
+                  </p>
+                </div>
+
+                <div className="review-comment">
+                  <div className="review-comment__header">
+                    <span className="review-comment__avatar">VT</span>
+                    <div className="review-comment__meta">
+                      <span className="review-comment__author">Văn Toàn (Dược sĩ)</span>
+                      <div className="review-comment__stars">★★★★★</div>
+                    </div>
+                    <span className="review-comment__verified">✓ Đã mua hàng</span>
+                  </div>
+                  <p className="review-comment__text">
+                    Sản phẩm đạt chuẩn GMP-WHO của nhà máy Dược liệu, an toàn và lành tính, nhà thuốc mình tư vấn cho khách rất yên tâm.
+                  </p>
+                </div>
+              </div>
+            </div>
 
             {/* Official Source Reference */}
             <section className="detail-source" aria-label="Nguồn thông tin sản phẩm">

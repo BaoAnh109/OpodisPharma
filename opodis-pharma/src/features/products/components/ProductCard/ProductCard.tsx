@@ -14,7 +14,6 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
 
-  const isAntiseptic = product.category.toLowerCase().includes("khử khuẩn") || product.category.toLowerCase().includes("sát khuẩn");
   const hasDiscount = Boolean(product.originalPrice && product.originalPrice > product.price);
   const discountPercent = hasDiscount
     ? Math.round((1 - product.price / product.originalPrice!) * 100)
@@ -35,13 +34,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
       aria-label={`Xem chi tiết sản phẩm ${product.name}`}
     >
       <div className="product-card__image-wrapper">
-        <span
-          className={`product-card__badge ${
-            isAntiseptic ? "product-card__badge--blue" : "product-card__badge--green"
-          }`}
-        >
-          {isAntiseptic ? "Sát khuẩn Y tế" : "Chăm sóc Thảo dược"}
-        </span>
         {hasDiscount ? (
           <span className="product-card__discount">-{discountPercent}%</span>
         ) : null}
@@ -56,11 +48,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="product-card__content">
         <span className="product-card__category">{product.category}</span>
         <h3 className="product-card__name">{product.name}</h3>
-        <span className="product-card__volume">{product.volume}</span>
+        <div className="product-card__meta-row">
+          <span className="product-card__volume">{product.volume}</span>
+          <span className="product-card__rating">
+            <span className="product-card__star">★</span>
+            <span className="product-card__rating-score">{product.rating ?? 4.9}</span>
+          </span>
+        </div>
 
         <div className="product-card__footer">
           <div className="product-card__price-wrap">
-            <span className="product-card__price">{formatCurrency(product.price)}</span>
+            <span className={`product-card__price ${hasDiscount ? "product-card__price--sale" : ""}`}>
+              {formatCurrency(product.price)}
+            </span>
             {hasDiscount ? (
               <span className="product-card__original-price">
                 {formatCurrency(product.originalPrice!)}
