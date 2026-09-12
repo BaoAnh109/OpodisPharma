@@ -5,9 +5,7 @@ import "@fontsource/nunito/600.css";
 import "@fontsource/nunito/700.css";
 import "@fontsource/nunito/800.css";
 import "@fontsource/nunito/900.css";
-import "@/styles/tokens.css";
 import "@/styles/globals.css";
-import "@/styles/utilities.css";
 
 import React from "react";
 import { createRoot } from "react-dom/client";

@@ -3,6 +3,10 @@ import { Icon, Page } from "zmp-ui";
 
 import EmptyState from "@/shared/components/EmptyState/EmptyState";
 import SectionTitle from "@/shared/components/SectionTitle/SectionTitle";
+import {
+  PAGE_CONTENT_CLASS,
+  PAGE_SHELL_CLASS,
+} from "@/shared/constants/tailwind";
 
 import ProductGrid from "../components/ProductGrid/ProductGrid";
 import { PRODUCTS } from "../data/products.mock";
@@ -52,10 +56,7 @@ const ProductListPage = () => {
     if (!isCategoryMenuOpen) return;
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (
-        categoryMenuRef.current &&
-        !categoryMenuRef.current.contains(event.target as Node)
-      ) {
+      if (categoryMenuRef.current && !categoryMenuRef.current.contains(event.target as Node)) {
         event.preventDefault();
         event.stopPropagation();
         setIsCategoryMenuOpen(false);
@@ -76,17 +77,12 @@ const ProductListPage = () => {
   }, [isCategoryMenuOpen]);
 
   const filteredProducts = PRODUCTS.filter((product) => {
-    // Filter by category
     if (selectedCategory === SALE_CATEGORY) {
       if (!product.originalPrice || product.originalPrice <= product.price) return false;
-    } else if (
-      selectedCategory !== ALL_CATEGORY &&
-      product.category !== selectedCategory
-    ) {
+    } else if (selectedCategory !== ALL_CATEGORY && product.category !== selectedCategory) {
       return false;
     }
 
-    // Filter by search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       const matchName = product.name.toLowerCase().includes(q);
@@ -114,32 +110,39 @@ const ProductListPage = () => {
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
 
+  const pillClass = (category: string) =>
+    `shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-[14px] py-[7px] text-[12px] font-bold transition-all duration-[160ms] ${
+      selectedCategory === category
+        ? "border-primary-dark bg-primary-soft text-primary-dark"
+        : "border-border bg-surface text-text-secondary"
+    }`;
+
   return (
-    <Page className="page-shell" name="products" resetScroll>
-      <main>
-        <section className="catalog-hero" aria-labelledby="catalog-title">
+    <Page className={PAGE_SHELL_CLASS} name="products" resetScroll>
+      <main className={PAGE_CONTENT_CLASS}>
+        <section className="relative pt-1.5" aria-labelledby="catalog-title">
           <SectionTitle
+            className="[&>h2]:mt-0.5 [&>h2]:text-[clamp(15px,4.2vw,17px)] [&>h2]:font-bold [&>h2]:leading-[1.35]"
             eyebrow="DANH MỤC SẢN PHẨM"
             title="Sản phẩm chính hãng Opodis"
             description="Đầy đủ các giải pháp chăm sóc gia đình và sát khuẩn y tế chuẩn GMP-WHO."
           />
 
-          {/* Search Box */}
           <form
-            className="catalog-search-form"
+            className="mb-3 flex items-stretch gap-2"
             role="search"
             onSubmit={(event) => {
               event.preventDefault();
               setSearchQuery(searchInput.trim());
             }}
           >
-            <div className="search-bar">
-              <span className="search-bar__icon">
+            <div className="relative mb-0 flex min-w-0 flex-1 items-center rounded-full border border-border bg-surface transition-[border-color,box-shadow] duration-[160ms] focus-within:border-primary focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(0,168,120,0.15)]">
+              <span className="flex items-center justify-center pl-[14px] text-text-secondary">
                 <Icon icon="zi-search" size={18} />
               </span>
               <input
                 type="text"
-                className="search-bar__input"
+                className="h-[42px] min-w-0 flex-1 border-0 bg-transparent py-0 pl-2.5 pr-3 text-[13px] text-text-primary outline-none placeholder:text-text-muted"
                 placeholder="Tìm tên, công dụng, thành phần..."
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
@@ -148,7 +151,7 @@ const ProductListPage = () => {
               {searchInput ? (
                 <button
                   type="button"
-                  className="search-bar__clear"
+                  className="mr-2 flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-full border-0 bg-[rgba(0,0,0,0.08)] text-[11px] text-text-secondary"
                   onClick={() => {
                     setSearchInput("");
                     setSearchQuery("");
@@ -159,16 +162,22 @@ const ProductListPage = () => {
                 </button>
               ) : null}
             </div>
-            <button type="submit" className="catalog-search-form__submit">
+            <button
+              type="submit"
+              className="inline-flex h-11 min-w-[68px] flex-none cursor-pointer items-center justify-center gap-[5px] rounded-full border-0 bg-primary-dark px-3 text-[12px] font-black text-white shadow-[0_4px_12px_rgba(0,136,98,0.2)] transition-transform active:scale-[0.97]"
+            >
               <span>Tìm</span>
             </button>
           </form>
 
-          {/* Quick category filter chips */}
-          <div className="category-pills" role="tablist" aria-label="Lọc nhanh theo danh mục">
+          <div
+            className="mb-2 flex gap-2 overflow-x-auto pb-2.5 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden"
+            role="tablist"
+            aria-label="Lọc nhanh theo danh mục"
+          >
             <button
               type="button"
-              className={`category-pill ${selectedCategory === ALL_CATEGORY ? "is-active" : ""}`}
+              className={pillClass(ALL_CATEGORY)}
               onClick={() => setSelectedCategory(ALL_CATEGORY)}
               aria-selected={selectedCategory === ALL_CATEGORY}
             >
@@ -176,7 +185,7 @@ const ProductListPage = () => {
             </button>
             <button
               type="button"
-              className={`category-pill ${selectedCategory === MOM_BABY_CATEGORY ? "is-active" : ""}`}
+              className={pillClass(MOM_BABY_CATEGORY)}
               onClick={() => setSelectedCategory(MOM_BABY_CATEGORY)}
               aria-selected={selectedCategory === MOM_BABY_CATEGORY}
             >
@@ -184,7 +193,7 @@ const ProductListPage = () => {
             </button>
             <button
               type="button"
-              className={`category-pill ${selectedCategory === ANTISEPTIC_CATEGORY ? "is-active" : ""}`}
+              className={pillClass(ANTISEPTIC_CATEGORY)}
               onClick={() => setSelectedCategory(ANTISEPTIC_CATEGORY)}
               aria-selected={selectedCategory === ANTISEPTIC_CATEGORY}
             >
@@ -192,32 +201,34 @@ const ProductListPage = () => {
             </button>
           </div>
 
-          {/* Product Grid or Empty State */}
           {filteredProducts.length > 0 ? (
             <>
-              <div className="catalog-status-row">
-                <p className="catalog-status">
+              <div className="mt-[6px] flex items-center justify-between gap-2.5 mb-[14px]">
+                <p className="m-0 min-w-0 text-[12px] text-text-secondary">
                   Hiển thị <strong>{pageStartIndex + 1}-{Math.min(pageStartIndex + PRODUCTS_PER_PAGE, filteredProducts.length)}</strong> / {filteredProducts.length} sản phẩm{" "}
                 </p>
 
-                {/* Dropdown category menu */}
                 <div
                   ref={categoryMenuRef}
-                  className={`category-filter ${isCategoryMenuOpen ? "is-open" : ""}`}
+                  className={`relative shrink-0 ${isCategoryMenuOpen ? "z-[120]" : ""}`}
                 >
                   <button
                     type="button"
-                    className="category-filter__trigger"
+                    className="flex min-h-[38px] cursor-pointer items-center justify-between gap-2 rounded-md border border-[rgba(0,168,120,0.28)] bg-primary-soft px-[11px] py-[7px] text-primary-dark shadow-subtle transition-all duration-[160ms] active:bg-[rgba(0,168,120,0.16)]"
                     onClick={() => setIsCategoryMenuOpen((isOpen) => !isOpen)}
                     aria-expanded={isCategoryMenuOpen}
                     aria-controls="product-category-menu"
                   >
-                    <span className="category-filter__trigger-main">
+                    <span className="flex min-w-0 items-center gap-1.5 text-left text-primary-dark">
                       <Icon icon="zi-more-grid" size={20} />
-                      <span className="category-filter__trigger-label">Danh mục</span>
+                      <span className="whitespace-nowrap text-[13px] font-bold leading-none text-primary-deep">
+                        Danh mục
+                      </span>
                     </span>
                     <span
-                      className={`category-filter__chevron ${isCategoryMenuOpen ? "is-open" : ""}`}
+                      className={`inline-flex shrink-0 items-center justify-center text-primary-dark transition-transform duration-200 ${
+                        isCategoryMenuOpen ? "rotate-180" : ""
+                      }`}
                       aria-hidden="true"
                     >
                       <svg
@@ -241,16 +252,16 @@ const ProductListPage = () => {
                   {isCategoryMenuOpen ? (
                     <div
                       id="product-category-menu"
-                      className="category-filter__menu"
+                      className="absolute right-0 top-[calc(100%+8px)] z-[2] h-[min(50vh,360px)] min-h-[250px] w-[min(340px,calc(100vw-32px))] origin-top overflow-hidden rounded-md border border-[rgba(0,168,120,0.18)] bg-white shadow-[0_18px_44px_rgba(22,46,38,0.2)] animate-category-menu-drop"
                       role="menu"
                       aria-label="Chọn danh mục sản phẩm"
                     >
-                      <div className="category-filter__menu-header">
-                        <strong>Chọn danh mục</strong>
-                        <span>{categoryOptions.length} lựa chọn</span>
+                      <div className="flex h-12 items-center justify-between border-b border-border bg-primary-soft px-[14px] text-primary-deep">
+                        <strong className="text-[14px] font-black">Chọn danh mục</strong>
+                        <span className="text-[10px] font-bold">{categoryOptions.length} lựa chọn</span>
                       </div>
 
-                      <div className="category-filter__menu-list">
+                      <div className="h-[calc(100%-48px)] overflow-y-auto overscroll-contain">
                         {categoryOptions.map((category) => {
                           const isSelected = selectedCategory === category.id;
 
@@ -258,7 +269,9 @@ const ProductListPage = () => {
                             <button
                               key={category.id}
                               type="button"
-                              className={`category-filter__item ${isSelected ? "is-selected" : ""}`}
+                              className={`grid min-h-[54px] w-full grid-cols-[38px_minmax(0,1fr)_auto_18px] items-center gap-2.5 border-0 border-b border-solid border-border bg-white px-[13px] py-[7px] text-left text-text-primary last:border-b-0 ${
+                                isSelected ? "bg-[rgba(0,168,120,0.07)]" : ""
+                              }`}
                               onClick={() => {
                                 setSelectedCategory(category.id);
                                 setIsCategoryMenuOpen(false);
@@ -266,12 +279,16 @@ const ProductListPage = () => {
                               role="menuitemradio"
                               aria-checked={isSelected}
                             >
-                              <span className="category-filter__item-icon" aria-hidden="true">
+                              <span className="grid h-9 w-9 place-items-center rounded-md bg-surface text-[19px]" aria-hidden="true">
                                 {category.icon}
                               </span>
-                              <span className="category-filter__item-label">{category.label}</span>
-                              <span className="category-filter__item-count">{category.count}</span>
-                              <span className="category-filter__item-check" aria-hidden="true">
+                              <span className="min-w-0 text-[13px] font-extrabold leading-[1.3]">
+                                {category.label}
+                              </span>
+                              <span className="grid h-6 min-w-6 place-items-center rounded-full bg-surface-strong px-1.5 text-[10px] font-extrabold text-text-secondary">
+                                {category.count}
+                              </span>
+                              <span className="text-center text-[14px] font-black text-primary-dark" aria-hidden="true">
                                 {isSelected ? "✓" : ""}
                               </span>
                             </button>
@@ -282,26 +299,31 @@ const ProductListPage = () => {
                   ) : null}
                 </div>
               </div>
+
               <ProductGrid products={paginatedProducts} />
               {totalPages > 1 ? (
-                <nav className="product-pagination" aria-label="Phân trang sản phẩm">
+                <nav className="mt-5 mb-1 flex items-center justify-center gap-2.5" aria-label="Phân trang sản phẩm">
                   <button
                     type="button"
-                    className="product-pagination__arrow"
+                    className="inline-grid h-8 w-8 cursor-pointer place-items-center rounded-sm border border-border bg-white p-0 text-[22px] leading-none text-primary-dark disabled:cursor-not-allowed disabled:opacity-35"
                     onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                     disabled={currentPage === 1}
                     aria-label="Trang trước"
                   >
                     ‹
                   </button>
-                  <div className="product-pagination__pages">
+                  <div className="flex items-center gap-1.5">
                     {Array.from({ length: totalPages }, (_, index) => {
                       const page = index + 1;
                       return (
                         <button
                           key={page}
                           type="button"
-                          className={`product-pagination__page ${currentPage === page ? "is-active" : ""}`}
+                          className={`inline-grid h-8 w-8 cursor-pointer place-items-center rounded-sm border p-0 text-[12px] font-extrabold ${
+                            currentPage === page
+                              ? "border-primary-dark bg-primary-dark text-white"
+                              : "border-border bg-white text-text-secondary"
+                          }`}
                           onClick={() => setCurrentPage(page)}
                           aria-current={currentPage === page ? "page" : undefined}
                         >
@@ -312,7 +334,7 @@ const ProductListPage = () => {
                   </div>
                   <button
                     type="button"
-                    className="product-pagination__arrow"
+                    className="inline-grid h-8 w-8 cursor-pointer place-items-center rounded-sm border border-border bg-white p-0 text-[22px] leading-none text-primary-dark disabled:cursor-not-allowed disabled:opacity-35"
                     onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
                     disabled={currentPage === totalPages}
                     aria-label="Trang sau"
