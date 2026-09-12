@@ -8,6 +8,7 @@ import {
 import type { AppProps } from "zmp-ui/app";
 
 import Router from "./router";
+import StartupPromo from "@/shared/components/StartupPromo/StartupPromo";
 
 const resolveTheme = (): AppProps["theme"] => {
   try {
@@ -34,6 +35,7 @@ const App = () => {
     <ZmpApp theme={resolveTheme()}>
       <SnackbarProvider>
         <Router />
+        <StartupPromo />
       </SnackbarProvider>
     </ZmpApp>
   );
